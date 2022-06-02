@@ -247,6 +247,7 @@ lazy val `interface-test` = project
   .settings(
     Settings.shared,
     publish / skip := true,
+    crossPaths := false, // https://github.com/sbt/junit-interface/issues/35
     autoScalaLibrary := false,
     crossVersion := CrossVersion.disabled,
     libraryDependencies ++= Seq(
@@ -262,9 +263,7 @@ lazy val `interface-test` = project
     },
     Test / unmanagedClasspath ++= Def.taskDyn {
       if (sys.env.get("TEST_VERSION").isEmpty)
-        Def.task {
-          Seq((interface / finalPackageBin).value)
-	}
+        Def.task { Seq((interface / finalPackageBin).value) }
       else
         Def.task(Seq.empty[File])
     }.value
